@@ -1,5 +1,6 @@
 package com.orderplatform.newproject.users;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,5 +22,17 @@ public class UserController {
     @GetMapping
     public List<User> getAll() {
         return usersService.getAll();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        usersService.delete(id);
+
+        return ResponseEntity.ok("user deleted");
+    }
+
+    @PatchMapping("/{id}")
+    public User update(@PathVariable Long id, @RequestBody UserDto dto){
+        return usersService.update(id,dto);
     }
 }

@@ -1,5 +1,8 @@
-package com.orderplatform.newproject.users;
+package com.orderplatform.newproject.service;
 
+import com.orderplatform.newproject.domain.User;
+import com.orderplatform.newproject.dto.UserDto;
+import com.orderplatform.newproject.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;

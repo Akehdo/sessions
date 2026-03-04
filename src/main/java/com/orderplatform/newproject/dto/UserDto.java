@@ -1,4 +1,4 @@
-package com.orderplatform.newproject.users;
+package com.orderplatform.newproject.dto;
 
 public record UserDto(
         String name,

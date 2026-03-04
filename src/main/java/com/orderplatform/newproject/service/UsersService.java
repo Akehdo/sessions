@@ -1,55 +1,37 @@
 package com.orderplatform.newproject.service;
-
 import com.orderplatform.newproject.domain.User;
-import com.orderplatform.newproject.dto.UserDto;
+import com.orderplatform.newproject.exception.UserAlreadyExistException;
+import com.orderplatform.newproject.exception.UserNotFoundException;
 import com.orderplatform.newproject.repository.UserRepository;
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UsersService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    public UsersService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    public User create(String name, String email){
-        User user = new User();
-
-        user.setName(name);
-        user.setEmail(email);
-
-        return userRepository.save(user);
-    }
-
-    public List<User>  getAll() {
-        return userRepository.findAll();
-    }
-
-    public void delete(Long id){
-        // check if user exist
-       if(!userRepository.existsById(id)) {
-           throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
-       }
-
-        userRepository.deleteById(id);
-    }
-
-    public User update(Long id, UserDto dto) {
-        User user = userRepository.findById(id).orElseThrow();
-
-        if(dto.name() != null) {
-            user.setName(dto.name());
+    public User create(String email, String password) {
+        //check if user exist
+        if(userRepository.existsByEmail(email)) {
+            throw  new UserAlreadyExistException(email);
         }
 
-        if(dto.email() != null) {
-            user.setName(dto.email());
-        }
+        User user = User.create(email, password);
 
-        return userRepository.save(user);
+        userRepository.save(user);
+
+        return  user;
+    }
+
+    public User findByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundException(email));
+
+        return  user;
+    }
+
+    public boolean existByEmail(String email) {
+        return  userRepository.existsByEmail(email);
     }
 }

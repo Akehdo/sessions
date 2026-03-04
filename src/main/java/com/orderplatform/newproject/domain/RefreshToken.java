@@ -1,6 +1,7 @@
 package com.orderplatform.newproject.domain;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Fetch;
 
 import java.time.Instant;
 import java.util.UUID;
